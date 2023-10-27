@@ -1,4 +1,4 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RoleMasterAPI.Model
@@ -9,6 +9,9 @@ namespace RoleMasterAPI.Model
       
         public int Id { get; set; }
 
+        [Required]
+        [MaxLength(255)]
+        [Index(IsUnique = true)]
         public string Name { get; set; }
 
         public bool isActive { get; set; }

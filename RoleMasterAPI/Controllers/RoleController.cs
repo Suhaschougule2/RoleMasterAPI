@@ -27,11 +27,27 @@ namespace RoleMasterAPI.Controllers
         }
 
 
-        [HttpGet("GetAllRoles")]
+     /*   [HttpGet("GetAllRoles")]
         public async Task<IEnumerable<Role>> GetAllRoles()
         {
+
             var roles = await _roleService.GetAllRolesAsync();
             return roles;
+        }*/
+        [HttpGet("GetAllRoles")]
+        public async Task<IActionResult> GetAllRoles()
+        {
+            try
+            {
+                var roles = await _roleService.GetAllRolesAsync();
+                return Ok(roles); // Ensure you return Ok() with the roles
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions and return an appropriate result, e.g., InternalServerError
+                Console.Error.WriteLine($"An error occurred while retrieving roles: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
 
 
@@ -69,11 +85,11 @@ namespace RoleMasterAPI.Controllers
         {
             try
             {
-                int updatedRoleId = await _roleService.UpdateRoleAsync(id, role);
+                var updatedRoleId = await _roleService.UpdateRoleAsync(id, role);
 
                 if (updatedRoleId == -1)
                 {
-                    return NotFound("A role with the same Name already exists.");
+                    return NotFound();
                 }
 
                 return Ok(updatedRoleId);

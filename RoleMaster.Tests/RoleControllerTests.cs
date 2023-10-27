@@ -10,24 +10,26 @@ namespace RoleMaster.Tests
     public class RoleControllerTests
     {
         [Fact]
-       public async Task GetAllRoles_Returns_No_Of_Roles()
-       {
-            //arrange
+        public async Task GetAllRoles_Returns_SingleRole_WhenServiceReturnsOneRole()
+        {
+            // Arrange
             var roleServiceMock = new Mock<IRoleService>();
             roleServiceMock.Setup(repo => repo.GetAllRolesAsync())
                 .ReturnsAsync(new List<Role> { new Role { Id = 1, Name = "Admin", isActive = true } });
 
             var controller = new RoleController(roleServiceMock.Object);
 
-            //act
+            // Act
             var result = await controller.GetAllRoles();
 
-
-            //assert
+            // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
             var roles = Assert.IsAssignableFrom<IEnumerable<Role>>(okResult.Value);
+
+            // Ensure that there is exactly one role in the collection
             Assert.Single(roles);
-       }
+        }
+
 
 
 
@@ -77,7 +79,7 @@ namespace RoleMaster.Tests
         {
             // Arrange
             var roleServiceMock = new Mock<IRoleService>();
-            roleServiceMock.Setup(repo => repo.GetRoleByIdAsync(It.IsAny<int>()))
+            roleServiceMock.Setup(repo => repo.GetRoleByIdAsync(It.IsAny<int>(), It.IsAny<Role>))
                 .ReturnsAsync(new Role { Id = 1, Name = "Admin", isActive = true });
 
             var controller = new RoleController(roleServiceMock.Object);
