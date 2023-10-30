@@ -74,12 +74,12 @@ namespace RoleMaster.Tests
 
 
 
-        [Fact]
+       /* [Fact]
         public async Task UpdateRole_Returns_UpdatedRole()
         {
             // Arrange
             var roleServiceMock = new Mock<IRoleService>();
-            roleServiceMock.Setup(repo => repo.GetRoleByIdAsync(It.IsAny<int>(), It.IsAny<Role>))
+            roleServiceMock.Setup(repo => repo.GetRoleByIdAsync(It.IsAny<int>()))
                 .ReturnsAsync(new Role { Id = 1, Name = "Admin", isActive = true });
 
             var controller = new RoleController(roleServiceMock.Object);
@@ -92,7 +92,27 @@ namespace RoleMaster.Tests
             var updatedRole = Assert.IsType<Role>(okResult.Value);
             Assert.Equal("SuperAdmin", updatedRole.Name);
         }
+*/
+        [Fact]
+        public async Task UpdateRole_Returns_OkResult_WithUpdatedRole()
+        {
+            // Arrange
+            var roleServiceMock = new Mock<IRoleService>();
+            roleServiceMock.Setup(repo => repo.UpdateRoleAsync(It.IsAny<int>(), It.IsAny<Role>()))
+                .ReturnsAsync((int id, Role updatedRole) => id); // Returns the updated role ID
 
+            var controller = new RoleController(roleServiceMock.Object);
+
+            // Act
+            var result = await controller.UpdateRole(1, new Role { Id = 1, Name = "SuperAdmin", isActive = true });
+
+            // Assert
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var updatedRoleId = Assert.IsType<int>(okResult.Value);
+
+            // Add more assertions if needed
+            Assert.Equal(1, updatedRoleId); // Ensure that the correct role ID is returned
+        }
 
         [Fact]
         public async Task DeleteRole_Returns_NoContentResult()

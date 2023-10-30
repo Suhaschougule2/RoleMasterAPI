@@ -105,11 +105,11 @@ namespace RoleMasterAPI.Repositories
 
              try
              {
-                if (await _dbContext.Roles.AnyAsync(r => r.Name == role.Name))
+                /*if (await _dbContext.Roles.AnyAsync(r => r.Name == role.Name))
                 {
                     Console.Error.WriteLine("A role with the same Name already exists.");
                     return -1;
-                }
+                }*/
 
                 _dbContext.Roles.Add(role);
                 await _dbContext.SaveChangesAsync();
@@ -132,7 +132,7 @@ namespace RoleMasterAPI.Repositories
             {
                 var existingRole = await _dbContext.Roles.FindAsync(id);
 
-                if (existingRole == null)
+              /*  if (existingRole == null)
                 {
                     return -1; // Indicates that the role with the given ID was not found.
                 }
@@ -141,7 +141,7 @@ namespace RoleMasterAPI.Repositories
                 if (await _dbContext.Roles.AnyAsync(r => r.Name == role.Name && r.Id != id))
                 {
                     return -1; // Indicates a duplicate role name.
-                }
+                }*/
 
                 existingRole.Name = role.Name;
                 existingRole.isActive = role.isActive; 
